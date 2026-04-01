@@ -12,9 +12,11 @@ body {
   width: 300px;
 }
 
-.input {
+.input, .filters {
   display: flex;
+  justify-content: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .todo {
