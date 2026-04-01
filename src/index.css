@@ -23,7 +23,7 @@ body {
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 0 5px; 
+  padding: 0 5px;
 }
 
 .filters {
@@ -33,7 +33,8 @@ body {
   margin: 20px 0;
 }
 
-.filters button, .input button {
+.filters button,
+.input button {
   background: #1e293b;
   color: white;
   border: none;
@@ -43,7 +44,8 @@ body {
   transition: 0.3s;
 }
 
-.filters button:hover, .input button:hover {
+.filters button:hover,
+.input button:hover {
   background: #38bdf8;
   color: black;
 }
@@ -56,6 +58,12 @@ body {
   background: #1e293b;
   border-radius: 6px;
   cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.todo:hover {
+  transform: scale(1.02);
+  background: #334155;
 }
 
 .todo:active {
