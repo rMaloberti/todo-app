@@ -12,11 +12,40 @@ body {
   width: 300px;
 }
 
-.input, .filters {
+.input {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 10px;
+}
+
+.input input {
+  background: #1e293b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0 5px; 
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.filters button, .input button {
+  background: #1e293b;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filters button:hover, .input button:hover {
+  background: #38bdf8;
+  color: black;
 }
 
 .todo {
