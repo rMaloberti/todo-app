@@ -70,3 +70,7 @@ body {
   cursor: grabbing;
   opacity: 0.7;
 }
+
+.drag-over {
+  border: 2px dashed #38bdf8;
+}

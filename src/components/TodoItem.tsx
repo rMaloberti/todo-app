@@ -29,6 +29,8 @@ function TodoItem({ todo, index, moveTodo, toggleTodo, deleteTodo }: Props) {
       onDragStart={handleDragStart}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      onDragEnter={(e) => e.currentTarget.classList.add("drag-over")}
+      onDragLeave={(e) => e.currentTarget.classList.remove("drag-over")}
     >
       <span
         onClick={() => toggleTodo(todo.id)}
