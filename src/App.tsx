@@ -43,6 +43,13 @@ function App() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const moveTodo = (from: number, to: number) => {
+    const updated = [...todos];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    setTodos(updated);
+  };
+
   return (
     <div className="container">
       <h1>Todo App</h1>
@@ -55,10 +62,12 @@ function App() {
         <button onClick={addTodo}>Add</button>
       </div>
       <div>
-        {todos.map((todo) => (
+        {todos.map((todo, index) => (
           <TodoItem
             key={todo.id}
             todo={todo}
+            index={index}
+            moveTodo={moveTodo}
             toggleTodo={toggleTodo}
             deleteTodo={deleteTodo}
           />

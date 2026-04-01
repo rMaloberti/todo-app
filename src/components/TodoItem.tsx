@@ -2,13 +2,34 @@ import type { Todo } from "../types";
 
 interface Props {
   todo: Todo;
+  index: number;
+  moveTodo: (from: number, to: number) => void;
   toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
 }
 
-function TodoItem({ todo, toggleTodo, deleteTodo }: Props) {
+function TodoItem({ todo, index, moveTodo, toggleTodo, deleteTodo }: Props) {
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData("index", index.toString());
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    const fromIndex = Number(e.dataTransfer.getData("index"));
+    moveTodo(fromIndex, index);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   return (
-    <div className="todo">
+    <div
+      className="todo"
+      draggable
+      onDragStart={handleDragStart}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+    >
       <span
         onClick={() => toggleTodo(todo.id)}
         style={{
