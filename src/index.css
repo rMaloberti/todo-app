@@ -9,7 +9,6 @@ body {
 
 .container {
   margin-top: 50px;
-  width: 300px;
 }
 
 .input {
@@ -26,14 +25,6 @@ body {
   padding: 0 5px;
 }
 
-.filters {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.filters button,
 .input button {
   background: #1e293b;
   color: white;
@@ -44,33 +35,33 @@ body {
   transition: 0.3s;
 }
 
-.filters button:hover,
 .input button:hover {
   background: #38bdf8;
   color: black;
 }
 
-.todo {
+.board {
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  padding: 10px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.column {
   background: #1e293b;
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+}
+
+.task {
+  background: #334155;
+  padding: 10px;
+  margin-top: 10px;
   border-radius: 6px;
   cursor: grab;
-  transition: all 0.2s ease;
+  transition: 0.2s;
 }
 
-.todo:hover {
+.task:hover {
   transform: scale(1.02);
-  background: #334155;
-}
-
-.todo:active {
-  cursor: grabbing;
-  opacity: 0.7;
-}
-
-.drag-over {
-  border: 2px dashed #38bdf8;
 }

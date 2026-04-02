@@ -1,65 +1,62 @@
 import { useState, useEffect } from "react";
-import TodoItem from "./components/TodoItem";
-import type { Todo } from "./types";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import Column from "./components/Column";
+import type { DragEndEvent } from "@dnd-kit/core";
+import type { Task } from "./types";
+
+const initialTasks: Task[] = [
+  { id: "1", text: "Learn React", column: "done" },
+  { id: "2", text: "Build project", column: "progress" },
+  { id: "3", text: "Deploy app", column: "todo" },
+];
+
+type ColumnId = "todo" | "progress" | "done";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [tasks, setTasks] = useState(initialTasks);
   const [input, setInput] = useState("");
-
-  // Filter
-  type Filter = "all" | "active" | "completed";
-
-  const [filter, setFilter] = useState<Filter>("all");
 
   // Load from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("todos");
+    const stored = localStorage.getItem("tasks");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (stored) setTodos(JSON.parse(stored));
+    if (stored) setTasks(JSON.parse(stored));
   }, []);
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
-  const addTodo = () => {
+  const addTask = () => {
     if (!input.trim()) return;
 
-    const newTodo: Todo = {
-      id: Date.now(),
+    const newTask: Task = {
+      id: Date.now().toString(),
       text: input,
-      completed: false,
+      column: "todo",
     };
 
-    setTodos([...todos, newTodo]);
+    setTasks([...tasks, newTask]);
     setInput("");
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
-  };
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+    const columns: ColumnId[] = ["todo", "progress", "done"];
 
-  const moveTodo = (from: number, to: number) => {
-    const updated = [...todos];
-    const [moved] = updated.splice(from, 1);
-    updated.splice(to, 0, moved);
-    setTodos(updated);
+    if (columns.includes(over.id as ColumnId)) {
+      setTasks((tasks) =>
+        tasks.map((task) =>
+          task.id === active.id
+            ? { ...task, column: over.id as ColumnId }
+            : task,
+        ),
+      );
+    }
   };
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === "active") return !todo.completed;
-    if (filter === "completed") return todo.completed;
-    return true;
-  });
 
   return (
     <div className="container">
@@ -70,25 +67,27 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add a task..."
         />
-        <button onClick={addTodo}>Add</button>
+        <button onClick={addTask}>Add</button>
       </div>
-      <div className="filters">
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("completed")}>Completed</button>
-      </div>
-      <div>
-        {filteredTodos.map((todo, index) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            index={index}
-            moveTodo={moveTodo}
-            toggleTodo={toggleTodo}
-            deleteTodo={deleteTodo}
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <div className="board">
+          <Column
+            id="todo"
+            title="To Do"
+            tasks={tasks.filter((t) => t.column === "todo")}
           />
-        ))}
-      </div>
+          <Column
+            id="progress"
+            title="In Progress"
+            tasks={tasks.filter((t) => t.column === "progress")}
+          />
+          <Column
+            id="done"
+            title="Done"
+            tasks={tasks.filter((t) => t.column === "done")}
+          />
+        </div>
+      </DndContext>
     </div>
   );
 }
